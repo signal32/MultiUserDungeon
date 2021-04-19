@@ -1,10 +1,19 @@
 package ac.abdn.cs3524.mud.common;
 
-public interface PlayerInterface {
+import java.rmi.Remote;
+import java.rmi.RemoteException;
 
-    Vertex getLocation();
-    boolean move(Edge edge);
+public interface PlayerInterface extends Remote {
 
-    boolean pickUp(String item);
-    boolean drop(String item);
+    abstract void setName(String name) throws RemoteException;
+    abstract String getName() throws RemoteException;
+
+    abstract void setLocation(String location) throws RemoteException;
+    abstract String getLocation() throws RemoteException;
+
+    abstract boolean move(String direction) throws RemoteException;
+
+    abstract boolean pickUp(String item) throws RemoteException;
+
+    abstract boolean drop(String item) throws RemoteException;
 }

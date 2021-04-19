@@ -11,6 +11,8 @@ public class Config {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(Config.class);
 
+    private static Config config;
+
     private final Properties properties;
     private final File file;
 
@@ -23,6 +25,8 @@ public class Config {
         try(FileReader reader = new FileReader(file)){
             properties.load(reader);
         }
+
+        config = this;
     }
 
     public Optional<String> getProperty(String key){
@@ -36,5 +40,9 @@ public class Config {
         } catch (Exception e) {
             LOGGER.warn("Properties file not updated: {}", e.getMessage());
         }
+    }
+
+    public static Config getConfig(){
+        return Config.config;
     }
 }
