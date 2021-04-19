@@ -15,4 +15,6 @@ public interface MudServerInterface extends Remote {
 
     abstract Game newGame(String name, String edges) throws RemoteException;
     abstract Game getGame(UUID gameID) throws RemoteException;
+
+    abstract String ping() throws RemoteException;
 }

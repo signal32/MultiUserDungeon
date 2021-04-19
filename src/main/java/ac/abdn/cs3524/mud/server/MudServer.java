@@ -36,4 +36,9 @@ public class MudServer implements MudServerInterface {
     public Game getGame(UUID gameID) throws RemoteException {
         return null;
     }
+
+    @Override
+    public String ping() throws RemoteException {
+        return "pong";
+    }
 }
