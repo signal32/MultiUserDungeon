@@ -17,7 +17,7 @@ public class MudClient {
     public static void main(String[] args) {
         try{
             // Setup and get config
-            Config clientConfig = new Config("client.properties");    // Client config
+            Config clientConfig = new Config("content/client.properties");    // Client config
             String serverHostName = clientConfig.getProperty("server.hostname").orElse("localhost");
             int serverPort = Integer.parseInt(clientConfig.getProperty("server.port").orElse("8080"));
 

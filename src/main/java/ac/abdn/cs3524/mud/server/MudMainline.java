@@ -20,7 +20,7 @@ public class MudMainline {
 
         try {
             // Load configuration
-            Config config = new Config("server.properties");
+            Config config = new Config("content/server.properties");
             int registryPort = Integer.parseInt(config.getProperty("registry.port").orElseThrow());
             int serverPort = Integer.parseInt(config.getProperty("server.port").orElseThrow());
             String hostname = config.getProperty("server.hostname").orElse((InetAddress.getLocalHost()).getHostAddress());

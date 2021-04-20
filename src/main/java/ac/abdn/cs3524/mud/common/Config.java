@@ -18,8 +18,9 @@ public class Config {
 
     public Config(String path) throws IOException{
 
-        ClassLoader classloader = Thread.currentThread().getContextClassLoader();// read as input stream
-        file = new File(classloader.getResource(path).getFile());
+        //ClassLoader classloader = Thread.currentThread().getContextClassLoader();// read as input stream
+        //file = new File(classloader.getResource(path).getFile());
+        file = new File(path);
         properties = new Properties();
 
         try(FileReader reader = new FileReader(file)){
