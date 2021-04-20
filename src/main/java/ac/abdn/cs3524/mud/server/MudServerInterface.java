@@ -9,13 +9,6 @@ import java.util.UUID;
 
 public interface MudServerInterface extends Remote {
 
-    /**
-     * Creates a new player
-     * @param name the players display name
-     * @return
-     * @throws RemoteException
-     */
-    abstract PlayerInterface newPlayer(String name) throws RemoteException;
 
     abstract PlayerInterface joinGame(UUID gameID, String playerName) throws RemoteException;
 

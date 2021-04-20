@@ -23,26 +23,13 @@ public class MudServer implements MudServerInterface {
     }
 
     @Override
-    public PlayerInterface newPlayer(String name) throws RemoteException {
-        try{
-            PlayerInterface player = new Player(name);
-            players.add(player);
-            LOGGER.info("Player {} connected", player.getName());
-            return (PlayerInterface) UnicastRemoteObject.exportObject(player, Integer.parseInt(CONFIG.getProperty("server.port").orElseThrow()));
-        }
-        catch (Exception e) {
-            LOGGER.error("Server could not create new player: {}", e.getMessage());
-            return null;
-        }
-    }
-
-    @Override
     public PlayerInterface joinGame(UUID gameID, String playerName) throws RemoteException{
         try{
             GameInterface game = games.get(gameID);
-            PlayerInterface player = newPlayer(playerName);
-            game.joinGame(player);
-            return player;
+            PlayerInterface player = game.joinGame(playerName);
+            players.add(player);
+            LOGGER.info("Player {} joined game", player.getName());
+            return (PlayerInterface) UnicastRemoteObject.exportObject(player, Integer.parseInt(CONFIG.getProperty("server.port").orElseThrow()));
         }
         catch (Exception e){
             LOGGER.error("Server could not join game: {}", e.getMessage());

@@ -7,6 +7,7 @@ import java.util.UUID;
 public interface GameInterface extends Remote {
 
     UUID getID() throws RemoteException;
-    boolean joinGame(PlayerInterface player) throws RemoteException;
+    PlayerInterface joinGame(String playerName) throws RemoteException;
     int playerCount() throws RemoteException;
+    PlayerManager getPlayerManager() throws RemoteException;
 }

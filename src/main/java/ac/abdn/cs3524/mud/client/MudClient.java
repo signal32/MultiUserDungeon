@@ -35,6 +35,9 @@ public class MudClient {
 
             LOGGER.info("Player count: {}",game.playerCount());
 
+            player.move("east");
+            LOGGER.info("Location {}",player.getLocation());
+
             // Main Game Loop
             boolean run = true;
             while (run){

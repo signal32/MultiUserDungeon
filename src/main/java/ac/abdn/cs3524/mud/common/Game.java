@@ -18,7 +18,8 @@ public class Game implements GameInterface {
 
     private final UUID id;
     private final MUD world;
-    private final List<PlayerInterface> players;
+    private final PlayerManager playerManager;      // Interface for players to interact with game
+    private final List<PlayerInterface> players;    // Players in the game
     private final int playerLimit;
 
     public Game(MUD world, List<PlayerInterface> players) {
@@ -26,6 +27,7 @@ public class Game implements GameInterface {
         this.world = world;
         this.players = players;
         this.playerLimit = Integer.parseInt(CONFIG.getProperty("game.default-player-limit").orElse("10"));
+        this.playerManager = new MUDPlayerManager(world);
     }
 
     public static Game fromID(String mapID) throws IllegalArgumentException{
@@ -44,18 +46,24 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public boolean joinGame(PlayerInterface player) throws RemoteException, IllegalArgumentException {
+    public PlayerInterface joinGame(String playerName) throws RemoteException, IllegalArgumentException {
 
         if (players.size() >= playerLimit) throw new IllegalArgumentException("Can't join game: full");
 
-        players.add(player);                        // Add player to game world
-        player.setLocation(world.startLocation());  // Set player defaults
+        // Create a new player for this game and add it to the world
+        PlayerInterface player = new Player(playerName,world.startLocation(),playerManager);
+        players.add(player);
 
-        return true;
+        return player;
     }
 
     @Override
     public int playerCount() throws RemoteException {
         return players.size();
+    }
+
+    @Override
+    public PlayerManager getPlayerManager() throws RemoteException {
+        return this.playerManager;
     }
 }

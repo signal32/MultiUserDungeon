@@ -4,14 +4,16 @@ import java.rmi.RemoteException;
 import java.util.UUID;
 
 public class Player implements PlayerInterface {
-    private final UUID id;
+    public final UUID id;
     private String name;
     private String location;
+    private final PlayerManager manager;
 
-    public Player(String name) {
+    public Player(String name, String startLocation, PlayerManager playerManager){
         this.id = UUID.randomUUID();
         this.name = name;
-        this.location = "";
+        this.location = startLocation;
+        this.manager = playerManager;
     }
 
     @Override
@@ -36,7 +38,7 @@ public class Player implements PlayerInterface {
 
     @Override
     public boolean move(String direction) throws RemoteException {
-        return false;
+        return manager.move(this,direction);
     }
 
     @Override
