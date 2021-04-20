@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory;
 
 import java.net.InetAddress;
 
-import java.rmi.RMISecurityManager;
+import java.lang.SecurityManager;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
@@ -25,9 +25,8 @@ public class MudMainline {
             int serverPort = Integer.parseInt(config.getProperty("server.port").orElseThrow());
             String hostname = config.getProperty("server.hostname").orElse((InetAddress.getLocalHost()).getHostAddress());
 
-            // Setup Security -- appears to work ok without...
-            //System.setProperty("java.security.policy", "rmi.policy");
-            //System.setSecurityManager( new RMISecurityManager() );
+            System.setProperty( "java.security.policy", "rmi.policy" ) ;
+            System.setSecurityManager( new SecurityManager() ) ;
 
             // Setup Mud Server and create stub
             MudServerInterface server = new MudServer();
