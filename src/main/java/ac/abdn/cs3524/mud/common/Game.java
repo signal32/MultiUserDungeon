@@ -36,7 +36,8 @@ public class Game implements GameInterface {
             return new Game(new MUD(mapDir + "/map.edg", mapDir + "/map.msg", mapDir + "/map.thg"), new ArrayList<>());
         }
         catch (Exception e){
-            throw new IllegalArgumentException("Could not load game: " + e.getMessage());
+            LOGGER.error("Could not load game: {}", e.getMessage());
+            throw new IllegalArgumentException("Could not load game");
         }
     }
 
@@ -46,15 +47,20 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public PlayerInterface joinGame(String playerName) throws RemoteException, IllegalArgumentException {
+    public PlayerInterface joinGame(String playerName) throws RemoteException {
+        try {
+            if (players.size() >= playerLimit) throw new RemoteException("Can't join game: full");
 
-        if (players.size() >= playerLimit) throw new IllegalArgumentException("Can't join game: full");
+            // Create a new player for this game and add it to the world
+            PlayerInterface player = new Player(playerName, world.startLocation(), playerManager);
+            players.add(player);
 
-        // Create a new player for this game and add it to the world
-        PlayerInterface player = new Player(playerName,world.startLocation(),playerManager);
-        players.add(player);
-
-        return player;
+            return player;
+        }
+        catch (Exception e){
+            LOGGER.error("Player {} could not join game {} : {}",playerName, this.id, e.getMessage());
+            throw new RemoteException("Could not join game");
+        }
     }
 
     @Override

@@ -28,12 +28,12 @@ public class MudServer implements MudServerInterface {
             GameInterface game = games.get(gameID);
             PlayerInterface player = game.joinGame(playerName);
             players.add(player);
-            LOGGER.info("Player {} joined game", player.getName());
+            LOGGER.info("Player '{}' joined game '{}'", player.getName(), gameID);
             return (PlayerInterface) UnicastRemoteObject.exportObject(player, Integer.parseInt(CONFIG.getProperty("server.port").orElseThrow()));
         }
         catch (Exception e){
-            LOGGER.error("Server could not join game: {}", e.getMessage());
-            throw new RemoteException("Server could not join game:" + e.getMessage());
+            LOGGER.error("Could not add player '{}' to game '{}': {}", playerName, gameID, e.getMessage());
+            throw new RemoteException("Could not join game");
         }
     }
 
@@ -42,24 +42,24 @@ public class MudServer implements MudServerInterface {
         try {
             GameInterface game = Game.fromID(mapID);
             this.games.put(game.getID(),game);
-            LOGGER.info("New game created");
+            LOGGER.info("New game created: gameID= {} mapID = {} ", game.getID(), mapID);
             return (GameInterface) UnicastRemoteObject.exportObject(game, Integer.parseInt(CONFIG.getProperty("server.port").orElseThrow()));
         }
         catch (Exception e) {
-            LOGGER.error("Server could not create new game: {}", e.getMessage());
-            throw new RemoteException("Server could not create new game: " + e.getMessage());
+            LOGGER.error("Server could not create new game using mapID '{}' : {}", mapID, e.getMessage());
+            throw new RemoteException("Server could not create new game");
         }
     }
 
     @Override
     public GameInterface newGame(String name, String edges, String messages, String things) throws RemoteException {
         LOGGER.error("Not implemented");
-        return null;
+        throw new RemoteException("Server could not create new game: not implemented");
     }
 
     @Override
     public GameInterface getGame(UUID gameID) throws RemoteException {
-        return null;
+        return games.get(gameID);
     }
 
     @Override

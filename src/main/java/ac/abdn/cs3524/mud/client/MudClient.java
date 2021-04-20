@@ -31,7 +31,7 @@ public class MudClient {
 
             // Join Game
             PlayerInterface player = server.joinGame(game.getID(), "test player");
-            LOGGER.info("Added {} at {}", player.getName(), player.getLocation());
+            LOGGER.info("Added '{}' to game '{}' at '{}'", player.getName(), game.getID(), player.getLocation());
 
             LOGGER.info("Player count: {}",game.playerCount());
 
