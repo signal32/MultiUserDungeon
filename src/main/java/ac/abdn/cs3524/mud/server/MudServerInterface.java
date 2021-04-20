@@ -5,6 +5,8 @@ import ac.abdn.cs3524.mud.common.PlayerInterface;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 
 public interface MudServerInterface extends Remote {
@@ -39,6 +41,13 @@ public interface MudServerInterface extends Remote {
      * @throws RemoteException
      */
     abstract GameInterface getGame(UUID gameID) throws RemoteException;
+
+    /**
+     * Get list of all games that are active on server
+     * @return list of game UUIDs
+     * @throws RemoteException
+     */
+    abstract List<UUID> listGames() throws RemoteException;
 
     abstract String ping() throws RemoteException;
 }

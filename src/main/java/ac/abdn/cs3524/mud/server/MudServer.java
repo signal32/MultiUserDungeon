@@ -63,6 +63,11 @@ public class MudServer implements MudServerInterface {
     }
 
     @Override
+    public List<UUID> listGames() throws RemoteException{
+        return new ArrayList<>(games.keySet());
+    }
+
+    @Override
     public String ping() throws RemoteException {
         return "pong";
     }

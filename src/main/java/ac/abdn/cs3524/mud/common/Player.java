@@ -37,6 +37,11 @@ public class Player implements PlayerInterface {
     }
 
     @Override
+    public String getLocationInfo() throws RemoteException {
+        return this.manager.getLocationInfo(this.location);
+    }
+
+    @Override
     public boolean move(String direction) throws RemoteException {
         return manager.move(this,direction);
     }

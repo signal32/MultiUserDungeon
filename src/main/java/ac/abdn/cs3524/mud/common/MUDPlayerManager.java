@@ -41,4 +41,14 @@ public class MUDPlayerManager implements PlayerManager{
         // TODO implement
         return false;
     }
+
+    @Override
+    public String getLocationInfo(String location) throws IllegalArgumentException {
+        try {
+            return mud.locationInfo(location);
+        }
+        catch (Exception e){
+            throw new IllegalArgumentException("Invalid location");
+        }
+    }
 }

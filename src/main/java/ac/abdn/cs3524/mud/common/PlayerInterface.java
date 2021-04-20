@@ -10,6 +10,7 @@ public interface PlayerInterface extends Remote {
 
     abstract void setLocation(String location) throws RemoteException;
     abstract String getLocation() throws RemoteException;
+    abstract String getLocationInfo() throws RemoteException;
 
     abstract boolean move(String direction) throws RemoteException;
 
