@@ -26,6 +26,9 @@ public class MudClient {
             // Connect to remote server
             Registry registry = LocateRegistry.getRegistry(serverHostName,serverPort);
             MudServerInterface server = (MudServerInterface) registry.lookup("MudServerInterface");
+
+            // Allocate a player
+            PlayerInterface player = null;
             
             // Main Menu for the Client
             MainMenu: {
@@ -42,7 +45,7 @@ public class MudClient {
                         System.out.println("Creating New Game");
                         GameInterface game = server.newGame("myMud");
                         LOGGER.info("Player count: {}",game.playerCount());
-                        PlayerInterface player = server.joinGame(game.getID(), "test player");
+                        player = server.joinGame(game.getID(), "test player");
                         break;
                     } else if (menuInputOne.equalsIgnoreCase("2")) {
                         while (true) {
@@ -58,7 +61,7 @@ public class MudClient {
                                     System.out.println("Joining: " + menuInputTwo);
                                     GameInterface game = server.getGame(UUID.fromString(menuInputTwo));
                                     LOGGER.info("Player count: {}",game.playerCount());
-                                    PlayerInterface player = server.joinGame(UUID.fromString(menuInputTwo), "test player");
+                                    player = server.joinGame(UUID.fromString(menuInputTwo), "test player");
                                     break MainMenu;
                                     }
                                 } else {
@@ -81,15 +84,20 @@ public class MudClient {
                 }
             }
 
+            if (player == null) {
+                LOGGER.error("Player is null");
+                System.exit(-1);
+            }
+
             // Start game
             //GameInterface game = server.newGame("myMud");
             //LOGGER.info("Player count: {}",game.playerCount());
 
             // Join Game
             //PlayerInterface player = server.joinGame(game.getID(), "test player");
-            LOGGER.info("Added '{}' to game '{}' at '{}'", player.getName(), game.getID(), player.getLocation());
+           /*LOGGER.info("Added '{}' to game '{}' at '{}'", player.getName(), game.getID(), player.getLocation());
 
-            LOGGER.info("Player count: {}",game.playerCount());
+            LOGGER.info("Player count: {}",game.playerCount());*/
 
             player.move("east");
             LOGGER.info("Location {}",player.getLocation());
