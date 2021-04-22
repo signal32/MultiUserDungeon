@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id 'application'
 }
 
 group 'ac.abdn.cs3524'
@@ -12,10 +13,55 @@ repositories {
 dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-api:5.7.0'
     testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.7.0'
-    implementation 'org.slf4j:slf4j-api:1.7.30'
-    implementation 'org.slf4j:slf4j-simple:1.7.30'
+    compile 'org.slf4j:slf4j-api:1.7.30'
+    compile 'org.slf4j:slf4j-simple:1.7.30'
 }
 
 test {
     useJUnitPlatform()
 }
+
+apply plugin: 'java'
+
+task(runServer, dependsOn: 'classes', type: JavaExec) {
+    main = 'ac.abdn.cs3524.mud.server.MudMainline'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task(runClient, dependsOn: 'classes', type: JavaExec) {
+    main = 'ac.abdn.cs3524.mud.client.MudClient'
+    classpath = sourceSets.main.runtimeClasspath
+    //args ''
+    //systemProperty 'simple.message', 'Hello '
+}
+
+task copyContent {
+    copy {
+        from 'content'
+        into "build/libs/content"
+    }
+}
+
+task buildServerJar (type: Jar){
+    baseName 'MUD-Server'
+    manifest {
+        attributes 'Main-Class': 'ac.abdn.cs3524.mud.server.MudMainline'
+    }
+    from {
+        configurations.compile.collect {it.isDirectory() ? it: zipTree(it)}
+    } with jar
+}
+
+task buildClientJar (type: Jar){
+    baseName 'MUD-Client'
+    manifest {
+        attributes 'Main-Class': 'ac.abdn.cs3524.mud.client.MudClient'
+    }
+    from {
+        configurations.compile.collect {it.isDirectory() ? it: zipTree(it)}
+    } with jar
+}
+
+task buildServer (dependsOn: [buildServerJar, copyContent])
+
+task buildClient (dependsOn: [buildClientJar, copyContent])

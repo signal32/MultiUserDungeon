@@ -25,7 +25,7 @@ public class MudMainline {
             int serverPort = Integer.parseInt(config.getProperty("server.port").orElseThrow());
             String hostname = config.getProperty("server.hostname").orElse((InetAddress.getLocalHost()).getHostAddress());
 
-            System.setProperty( "java.security.policy", "rmi.policy" ) ;
+            System.setProperty( "java.security.policy", "content/rmi.policy" ) ;
             System.setSecurityManager( new SecurityManager() ) ;
 
             // Setup Mud Server and create stub
