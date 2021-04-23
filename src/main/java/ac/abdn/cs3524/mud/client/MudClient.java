@@ -115,6 +115,8 @@ public class MudClient {
                 // TODO wait for input
                 // TODO update
                 // TODO display
+                
+                // if command == exit, then:
                 run = false;
             }
 
@@ -124,6 +126,7 @@ public class MudClient {
         catch (Exception e){
             LOGGER.error("Fatal error: {}", e.getMessage());
         }
+        main(null);
     }
     
     static boolean isUUID(String string) {
