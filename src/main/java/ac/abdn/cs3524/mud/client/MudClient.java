@@ -37,6 +37,7 @@ public class MudClient {
                     System.out.println("1. Create a new game");
                     System.out.println("2. Join existing game");
                     System.out.println("3. View existing games");
+                    System.out.println("4. Exit the server");
                     Scanner in1 = new Scanner(System.in);
                     String menuInputOne;
                     menuInputOne = in1.next();
@@ -78,6 +79,12 @@ public class MudClient {
                                 System.out.println((i + 1) + ". " + server.listGames().get(i).toString());
                             }
                         }
+                    } else if (menuInputOne.equalsIgnoreCase("4")) {
+                        System.out.println("Are you sure about this? (y/n)");
+                        Scanner in3 = new Scanner(System.in);
+                        String menuInputThree;
+                        menuInputThree = in3.next();
+                        if (menuInputThree.equalsIgnoreCase("y")) return;
                     } else {
                         System.out.println("Invalid input, please try again");
                     }
