@@ -30,6 +30,9 @@ public class MudClient {
             // Allocate a player
             PlayerInterface player = null;
             
+            // Allocate a game
+            GameInterface game;
+            
             // Main Menu for the Client
             MainMenu: {
                 while (true) {
@@ -44,7 +47,7 @@ public class MudClient {
 
                     if (menuInputOne.equalsIgnoreCase("1")) {
                         System.out.println("Creating New Game");
-                        GameInterface game = server.newGame("myMud");
+                        game = server.newGame("myMud");
                         LOGGER.info("Player count: {}",game.playerCount());
                         player = server.joinGame(game.getID(), "test player");
                         break;
@@ -60,7 +63,7 @@ public class MudClient {
                                 if (isUUID(menuInputTwo)) {
                                     if (server.listGames().contains(UUID.fromString(menuInputTwo))){
                                     System.out.println("Joining: " + menuInputTwo);
-                                    GameInterface game = server.getGame(UUID.fromString(menuInputTwo));
+                                    game = server.getGame(UUID.fromString(menuInputTwo));
                                     LOGGER.info("Player count: {}",game.playerCount());
                                     player = server.joinGame(UUID.fromString(menuInputTwo), "test player");
                                     break MainMenu;
