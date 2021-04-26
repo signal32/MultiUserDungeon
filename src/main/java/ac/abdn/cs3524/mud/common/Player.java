@@ -1,6 +1,8 @@
 package ac.abdn.cs3524.mud.common;
 
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 public class Player implements PlayerInterface {
@@ -8,12 +10,14 @@ public class Player implements PlayerInterface {
     private String name;
     private String location;
     private final PlayerManager manager;
+    private List<String> inventory;
 
     public Player(String name, String startLocation, PlayerManager playerManager){
         this.id = UUID.randomUUID();
         this.name = name;
         this.location = startLocation;
         this.manager = playerManager;
+        this.inventory = new ArrayList<>();
     }
 
     @Override
@@ -48,6 +52,7 @@ public class Player implements PlayerInterface {
 
     @Override
     public boolean pickUp(String item) throws RemoteException {
+        //manager.pickup(item);
         return false;
     }
 

@@ -51,10 +51,14 @@ public class MudClient {
 
 
     private void menu() throws RemoteException {
-        System.out.println("Enter a name and press ENTER to continue: ");
-        Scanner scanner = new Scanner(System.in);
         String playerName;
-        playerName = scanner.next();
+        if (player == null) {
+            System.out.println("Enter a name and press ENTER to continue: ");
+            Scanner scanner = new Scanner(System.in);
+            playerName = scanner.next();
+        }
+        else
+            playerName = player.getName();
 
         boolean menu = true;
         while (menu) {
@@ -69,7 +73,7 @@ public class MudClient {
 
             if (menuInputOne.equalsIgnoreCase("1")) {
                 System.out.println("Creating New Game");
-                game = server.newGame("myMud");
+                game = server.newGame("epic");
                 player = server.joinGame(game.getID(), playerName);
                 return;
 
@@ -120,28 +124,35 @@ public class MudClient {
 
         System.out.println("Hello " + player.getName() +", You have entered the game at: " + player.getLocation() + player.getLocationInfo());
         boolean play = true;
-        while (play) {
+        while (play && run) {
 
             // Get input and update
             player.getLocationInfo();
             System.out.println("Type command:");
-            switch (scanner.next()){
-                case "north": case "n":
-                    player.move("north");break;
-                case "south": case "s":
-                    player.move("south");break;
-                case "east": case "e":
-                    player.move("east"); break;
-                case "west": case "w":
-                    player.move("west"); break;
-                case "exit":
-                    play = false; break;
+            String input =scanner.next();
+            if (input.equals("north") || input.equals("n")) {
+                player.move("north");break;
+            }
+            else if (input.equals("south") || input.equals("s")) {
+                player.move("south");
+            }
+            else if (input.equals("east") || input.equals("e")) {
+                player.move("east");
+            }
+            else if (input.equals("west") || input.equals("w")) {
+                player.move("west");
+            }
+            else if (input.equals("exit")) {
+                play = false;
             }
 
             // Show location
             System.out.println(player.getLocationInfo());
 
         }
+
+        // Remove player from the game
+        exit();
     }
 
     private void exit() throws RemoteException {
