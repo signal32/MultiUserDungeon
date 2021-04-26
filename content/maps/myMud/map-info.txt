@@ -1,0 +1,3 @@
+NAME=Default Map
+DESCRIPTION=
+AUTHOR=

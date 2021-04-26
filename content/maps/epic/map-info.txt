@@ -1,0 +1,3 @@
+NAME=Epic Map
+DESCRIPTION=
+AUTHOR=Woijtek
