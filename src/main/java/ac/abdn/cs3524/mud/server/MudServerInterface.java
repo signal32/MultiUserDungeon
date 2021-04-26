@@ -50,5 +50,7 @@ public interface MudServerInterface extends Remote {
      */
     abstract List<UUID> listGames() throws RemoteException;
 
+    abstract List<String> listMaps() throws RemoteException;
+
     abstract String ping() throws RemoteException;
 }

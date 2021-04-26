@@ -4,6 +4,8 @@ import ac.abdn.cs3524.mud.common.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
+import java.io.FileFilter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
@@ -79,6 +81,16 @@ public class MudServer implements MudServerInterface {
     @Override
     public List<UUID> listGames() throws RemoteException{
         return new ArrayList<>(games.keySet());
+    }
+
+    @Override
+    public List<String> listMaps() throws RemoteException {
+        String mapDir = CONFIG.getProperty("game.content-directory").orElseThrow() + "/maps/";
+        List<String> maps = new ArrayList<>();
+        for (var map : new File(mapDir).listFiles(File::isDirectory)){
+            maps.add(map.getName());
+        }
+        return maps;
     }
 
     @Override
