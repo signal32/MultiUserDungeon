@@ -116,16 +116,31 @@ public class MudClient {
     }
 
     private void game() throws RemoteException{
+        Scanner scanner = new Scanner(System.in);
+
         System.out.println("Hello " + player.getName() +", You have entered the game at: " + player.getLocation() + player.getLocationInfo());
         boolean play = true;
         while (play) {
-            player.getLocationInfo();
-            // TODO wait for input
-            // TODO update
-            // TODO display
 
-            // if command == exit, then:
-            play=false;
+            // Get input and update
+            player.getLocationInfo();
+            System.out.println("Type command:");
+            switch (scanner.next()){
+                case "north": case "n":
+                    player.move("north");break;
+                case "south": case "s":
+                    player.move("south");break;
+                case "east": case "e":
+                    player.move("east"); break;
+                case "west": case "w":
+                    player.move("west"); break;
+                case "exit":
+                    play = false; break;
+            }
+
+            // Show location
+            System.out.println(player.getLocationInfo());
+
         }
     }
 
