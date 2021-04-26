@@ -39,8 +39,16 @@ public class MudServer implements MudServerInterface {
 
     @Override
     public void leaveGame(GameInterface game, PlayerInterface player) throws RemoteException {
-        game.removePlayer(player);
-        player.setLocation("No game");
+        try {
+            game.removePlayer(player);
+            player.setLocation("No game");
+            LOGGER.info("Player '{}' left game '{}'", player.getName(), game.getID());
+        }
+        catch (Exception e){
+            LOGGER.error("Could not add remove '{}' from game '{}': {}", player.getName(), game.getID(), e.getMessage());
+            throw new RemoteException("Could leave game: " + e.getMessage());
+        }
+
     }
 
     @Override

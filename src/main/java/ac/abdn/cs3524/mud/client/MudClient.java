@@ -51,10 +51,14 @@ public class MudClient {
 
 
     private void menu() throws RemoteException {
-        System.out.println("Enter a name and press ENTER to continue: ");
-        Scanner scanner = new Scanner(System.in);
         String playerName;
-        playerName = scanner.next();
+        if (player == null) {
+            System.out.println("Enter a name and press ENTER to continue: ");
+            Scanner scanner = new Scanner(System.in);
+            playerName = scanner.next();
+        }
+        else
+            playerName = player.getName();
 
         boolean menu = true;
         while (menu) {
@@ -69,7 +73,7 @@ public class MudClient {
 
             if (menuInputOne.equalsIgnoreCase("1")) {
                 System.out.println("Creating New Game");
-                game = server.newGame("myMud");
+                game = server.newGame("epic");
                 player = server.joinGame(game.getID(), playerName);
                 return;
 
@@ -120,7 +124,7 @@ public class MudClient {
 
         System.out.println("Hello " + player.getName() +", You have entered the game at: " + player.getLocation() + player.getLocationInfo());
         boolean play = true;
-        while (play) {
+        while (play && run) {
 
             // Get input and update
             player.getLocationInfo();
@@ -137,11 +141,15 @@ public class MudClient {
                 case "exit":
                     play = false; break;
             }
+            player.pickUp()
 
             // Show location
             System.out.println(player.getLocationInfo());
 
         }
+
+        // Remove player from the game
+        exit();
     }
 
     private void exit() throws RemoteException {
