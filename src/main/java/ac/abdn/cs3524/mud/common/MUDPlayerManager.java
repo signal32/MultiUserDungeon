@@ -32,14 +32,26 @@ public class MUDPlayerManager implements PlayerManager{
 
     @Override
     public boolean pickup(PlayerInterface player, String objectName) throws IllegalArgumentException {
-        // TODO implement
-        return false;
+        try {
+            mud.delThing(player.getLocation(), objectName);
+            return true;
+        }
+        catch (Exception e){
+            LOGGER.error("Could pickup thing: {}", e.getMessage());
+            throw new IllegalArgumentException("Could not pickup thing");
+        }
     }
 
     @Override
     public boolean drop(PlayerInterface player, String objectName) throws IllegalArgumentException {
-        // TODO implement
-        return false;
+        try {
+            mud.addThing(player.getLocation(), objectName);
+            return true;
+        }
+        catch (Exception e){
+            LOGGER.error("Could drop thing: {}", e.getMessage());
+            throw new IllegalArgumentException("Could not drop thing");
+        }
     }
 
     @Override

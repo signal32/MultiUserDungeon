@@ -73,7 +73,7 @@ public class MudClient {
 
             if (menuInputOne.equalsIgnoreCase("1")) {
                 System.out.println("Creating New Game");
-                game = server.newGame("epic");
+                game = server.newGame("myMud");
                 player = server.joinGame(game.getID(), playerName);
                 return;
 
@@ -131,7 +131,7 @@ public class MudClient {
             System.out.println("Type command:");
             String input =scanner.next();
             if (input.equals("north") || input.equals("n")) {
-                player.move("north");break;
+                player.move("north");
             }
             else if (input.equals("south") || input.equals("s")) {
                 player.move("south");
@@ -146,33 +146,21 @@ public class MudClient {
                 play = false;
             }
             else if (input.contains("pick")) {
-
-                String[] itemString = input.split(" ");
-                player.pickUp(itemString[1]);
-                System.out.println("You have obtained item " + itemString[1]);
+                player.pickUp(scanner.next());
+                System.out.println("Inventory: " + player.getInventory().toString());
             }
             else if (input.contains("drop")) {
-
-                String[] itemString = input.split(" ");
-                player.drop(itemString[1]);
-                System.out.println("You have dropped " + itemString[1]);
+                player.drop(scanner.next());
+                System.out.println("Inventory: " + player.getInventory().toString());
             }
             else if (input.equals("help")) {
                 displayHelp();
             }
-
-            /*if (input.contains("inventory")) {
-                if (inventory.size() < 1) {
-                System.out.println("Your inventory is currently empty.");
-                } else {
-                System.out.println("You have:");
-                for (String item : inventory) {
-                    System.out.println("* " + item);
-                    }
-            }*/
-            else if (input.equals("location")) {
-                System.out.println(player.getLocationInfo());
+            else if (input.equals("inventory") || input.equals("i")){
+                System.out.println(player.getInventory().toString());
             }
+
+            System.out.println(player.getLocationInfo());
         }
 
         // Remove player from the game

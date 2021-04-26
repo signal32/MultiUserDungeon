@@ -10,7 +10,7 @@ public class Player implements PlayerInterface {
     private String name;
     private String location;
     private final PlayerManager manager;
-    private List<String> inventory;
+    private final List<String> inventory;
 
     public Player(String name, String startLocation, PlayerManager playerManager){
         this.id = UUID.randomUUID();
@@ -52,12 +52,21 @@ public class Player implements PlayerInterface {
 
     @Override
     public boolean pickUp(String item) throws RemoteException {
-        //manager.pickup(item);
-        return false;
+        if (manager.pickup(this,item)) {
+            inventory.add(item);
+            return true;
+        }
+        else
+            return false;
     }
 
     @Override
     public boolean drop(String item) throws RemoteException {
-        return false;
+        return  (inventory.remove(item) && manager.drop(this, item));
+    }
+
+    @Override
+    public List<String> getInventory() throws RemoteException {
+        return inventory;
     }
 }

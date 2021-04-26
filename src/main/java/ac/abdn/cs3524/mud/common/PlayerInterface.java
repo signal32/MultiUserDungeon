@@ -2,6 +2,7 @@ package ac.abdn.cs3524.mud.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 
 public interface PlayerInterface extends Remote {
 
@@ -17,4 +18,6 @@ public interface PlayerInterface extends Remote {
     abstract boolean pickUp(String item) throws RemoteException;
 
     abstract boolean drop(String item) throws RemoteException;
+
+    abstract List<String> getInventory() throws RemoteException;
 }
