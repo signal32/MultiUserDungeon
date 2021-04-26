@@ -129,19 +129,22 @@ public class MudClient {
             // Get input and update
             player.getLocationInfo();
             System.out.println("Type command:");
-            switch (scanner.next()){
-                case "north": case "n":
-                    player.move("north");break;
-                case "south": case "s":
-                    player.move("south");break;
-                case "east": case "e":
-                    player.move("east"); break;
-                case "west": case "w":
-                    player.move("west"); break;
-                case "exit":
-                    play = false; break;
+            String input =scanner.next();
+            if (input.equals("north") || input.equals("n")) {
+                player.move("north");break;
             }
-            player.pickUp()
+            else if (input.equals("south") || input.equals("s")) {
+                player.move("south");
+            }
+            else if (input.equals("east") || input.equals("e")) {
+                player.move("east");
+            }
+            else if (input.equals("west") || input.equals("w")) {
+                player.move("west");
+            }
+            else if (input.equals("exit")) {
+                play = false;
+            }
 
             // Show location
             System.out.println(player.getLocationInfo());
