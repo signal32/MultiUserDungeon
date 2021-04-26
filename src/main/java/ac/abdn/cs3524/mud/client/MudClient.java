@@ -124,6 +124,8 @@ public class MudClient {
             }
 
             // TODO leave game
+            server.leaveGame(game,player);
+            LOGGER.info("Location {}",player.getLocation());
             // TODO close connections
         }
         catch (Exception e){

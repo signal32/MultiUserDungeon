@@ -72,4 +72,10 @@ public class Game implements GameInterface {
     public PlayerManager getPlayerManager() throws RemoteException {
         return this.playerManager;
     }
+
+    @Override
+    public boolean removePlayer(PlayerInterface player) throws RemoteException {
+        world.delThing(player.getLocation(),player.getName());
+        return true;
+    }
 }
