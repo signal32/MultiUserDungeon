@@ -7,14 +7,22 @@ import ac.abdn.cs3524.mud.server.MudServerInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
 import java.util.UUID;
+import java.util.List;
+import java.util.ArrayList;
 
 public class MudClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MudClient.class);
+    private static String playerName = "";
+    private static String playerInput = "";
+    private static String currentLocation = "";
+    //private static String mudName = "";
+    private static List<String> inventory = new ArrayList<>();
 
     public static void main(String[] args) {
         try{
@@ -22,14 +30,14 @@ public class MudClient {
             Config clientConfig = new Config("content/client.properties");    // Client config
             String serverHostName = clientConfig.getProperty("server.hostname").orElse("localhost");
             int serverPort = Integer.parseInt(clientConfig.getProperty("server.port").orElse("8080"));
-            
+
             // Connect to remote server
             Registry registry = LocateRegistry.getRegistry(serverHostName,serverPort);
             MudServerInterface server = (MudServerInterface) registry.lookup("MudServerInterface");
 
             // Allocate a player
             PlayerInterface player = null;
-            
+
             // Main Menu for the Client
             MainMenu: {
                 while (true) {
@@ -111,13 +119,80 @@ public class MudClient {
 
             // Main Game Loop
             boolean run = true;
-            while (run){
+            while (run) {
+
+                System.out.println("Welcome to MUD Game");
+                System.out.println("What is your name?");
+                try {
+                    System.out.println(": ");
+                    Scanner input= new Scanner(System.in);
+                    String playerName;
+                    playerName= input.nextLine();
+                    System.out.println("Let's continue onto the menu, " + playerName);
+                    //MainMenu();
+                    currentLocation = player.getLocation();
+
+
+                } catch (IOException e) {
+                    System.err.println("I/O error.");
+                    System.err.println(e.getMessage());
+                }
+
+                /*if (playerInput.contains("move")) {
+
+                    String[] directionString = playerInput.split(" ");
+                    if (currentLocation.equals(player.move(playerName))) {
+                        System.out.println("Sorry there isn't a path in this direction or your input is invalid");
+                    } else {
+                        System.out.println("You are moving " + directionString[1] + ".");
+                        currentLocation = player.move(directionString[]);
+                        System.out.println(player.getLocationInfo(currentLocation));
+                    }
+                }*/
+
+                if (playerInput.contains("pick")) {
+
+                    String[] itemString = playerInput.split(" ");
+
+                    player.pickUp(itemString[1]);
+                    inventory.add(itemString[1]);
+                    System.out.println("You have obtained item " + itemString[1]);
+                }
+
+                if (playerInput.contains("drop")) {
+
+                    String[] itemString = playerInput.split(" ");
+                    player.drop(itemString[1]);
+                    inventory.remove(itemString[1]);
+                    System.out.println("You have dropped " + itemString[1]);
+
+                }
+
+                if (playerInput.equals("help")) {
+                    displayHelp();
+                }
+
+                /*if (playerInput.contains("inventory")) {
+                if (inventory.size() < 1) {
+                System.out.println("Your inventory is currently empty.");
+                } else {
+                System.out.println("You have:");
+                for (String item : inventory) {
+                    System.out.println("* " + item);
+                    }
+            }*/
+
+
                 // TODO wait for input
                 // TODO update
                 // TODO display
-                
-                // if command == exit, then:
-                run = false;
+
+
+
+                if (playerInput.equals("exit")) {
+                    run = false;
+                }
+
             }
 
             // TODO leave game
@@ -128,7 +203,21 @@ public class MudClient {
         }
         main(null);
     }
-    
+
+    private static void displayHelp() {
+        System.out.println();
+        System.out.println("This is the help menu");
+        System.out.println();
+        System.out.println("move <direction> - move to a different area (north, east, south, west)");
+        System.out.println("pick <item> - pick up an item to your inventory");
+        System.out.println("drop <item> - drop an item to the ground");
+        System.out.println("inventory - display the items in your inventory");
+        System.out.println("location - scout your surroundings");
+        System.out.println("menu - choose options to join/create/view MUDS");
+        System.out.println("exit - exit the game");
+
+    }
+
     static boolean isUUID(String string) {
         try {
             UUID.fromString(string);
