@@ -145,10 +145,34 @@ public class MudClient {
             else if (input.equals("exit")) {
                 play = false;
             }
+            else if (input.contains("pick")) {
 
-            // Show location
-            System.out.println(player.getLocationInfo());
+                String[] itemString = input.split(" ");
+                player.pickUp(itemString[1]);
+                System.out.println("You have obtained item " + itemString[1]);
+            }
+            else if (input.contains("drop")) {
 
+                String[] itemString = input.split(" ");
+                player.drop(itemString[1]);
+                System.out.println("You have dropped " + itemString[1]);
+            }
+            else if (input.equals("help")) {
+                displayHelp();
+            }
+
+            /*if (input.contains("inventory")) {
+                if (inventory.size() < 1) {
+                System.out.println("Your inventory is currently empty.");
+                } else {
+                System.out.println("You have:");
+                for (String item : inventory) {
+                    System.out.println("* " + item);
+                    }
+            }*/
+            else if (input.equals("location")) {
+                System.out.println(player.getLocationInfo());
+            }
         }
 
         // Remove player from the game
@@ -159,7 +183,19 @@ public class MudClient {
         server.leaveGame(game,player);
     }
 
-
+    private static void displayHelp() {
+        System.out.println();
+        System.out.println("You can choose from one of these commands:");
+        System.out.println();
+        System.out.println("(move) <direction> - move in the selected direction (north, east, south, west)");
+        System.out.println("pick <item> - pick up the item to your inventory");
+        System.out.println("drop <item> - drop an item from your inventory");
+        System.out.println("inventory - see the items you are carrying");
+        System.out.println("location - show your current surroundings");
+        System.out.println("help - display the available commands");
+        System.out.println("menu - display all options regarding MUDS");
+        System.out.println("exit - exit the game");
+    }
 
     static boolean isUUID(String string) {
         try {
