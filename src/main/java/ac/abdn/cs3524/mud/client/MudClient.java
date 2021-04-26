@@ -51,6 +51,11 @@ public class MudClient {
 
 
     private void menu() throws RemoteException {
+        System.out.println("Enter a name and press ENTER to continue: ");
+        Scanner scanner = new Scanner(System.in);
+        String playerName;
+        playerName = scanner.next();
+
         boolean menu = true;
         while (menu) {
             System.out.println("Choose one of the options (by inputting its number then pressing ENTER):");
@@ -65,12 +70,12 @@ public class MudClient {
             if (menuInputOne.equalsIgnoreCase("1")) {
                 System.out.println("Creating New Game");
                 game = server.newGame("myMud");
-                LOGGER.info("Player count: {}", game.playerCount());
-                player = server.joinGame(game.getID(), "test player");
+                player = server.joinGame(game.getID(), playerName);
+                return;
 
             } else if (menuInputOne.equalsIgnoreCase("2")) {
                 while (true) {
-                    System.out.println("Input game's IP you want to join or press ENTER to go back");
+                    System.out.println("Input game's ID you want to join or press ENTER to go back");
                     Scanner in2 = new Scanner(System.in);
                     String menuInputTwo;
                     menuInputTwo = in2.nextLine();
@@ -81,8 +86,7 @@ public class MudClient {
                             if (server.listGames().contains(UUID.fromString(menuInputTwo))) {
                                 System.out.println("Joining: " + menuInputTwo);
                                 game = server.getGame(UUID.fromString(menuInputTwo));
-                                LOGGER.info("Player count: {}", game.playerCount());
-                                player = server.joinGame(UUID.fromString(menuInputTwo), "test player");
+                                player = server.joinGame(UUID.fromString(menuInputTwo), playerName);
                                 return;
                             }
                         } else {
@@ -112,7 +116,7 @@ public class MudClient {
     }
 
     private void game() throws RemoteException{
-        System.out.println("Hello" + player.getName() +", You have entered the game at: " + player.getLocation() + player.getLocationInfo());
+        System.out.println("Hello " + player.getName() +", You have entered the game at: " + player.getLocation() + player.getLocationInfo());
         boolean play = true;
         while (play) {
             player.getLocationInfo();
