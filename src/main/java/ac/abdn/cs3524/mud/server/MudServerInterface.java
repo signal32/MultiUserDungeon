@@ -13,6 +13,7 @@ public interface MudServerInterface extends Remote {
 
 
     abstract PlayerInterface joinGame(UUID gameID, String playerName) throws RemoteException;
+    abstract void leaveGame(GameInterface game, PlayerInterface player) throws RemoteException;
 
     /**
      * Create a new game using MUD loaded from file system

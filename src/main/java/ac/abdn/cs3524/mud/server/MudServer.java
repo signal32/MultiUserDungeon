@@ -38,6 +38,12 @@ public class MudServer implements MudServerInterface {
     }
 
     @Override
+    public void leaveGame(GameInterface game, PlayerInterface player) throws RemoteException {
+        game.removePlayer(player);
+        player.setLocation("No game");
+    }
+
+    @Override
     public GameInterface newGame(String mapID) throws RemoteException {
         try {
             GameInterface game = Game.fromID(mapID);

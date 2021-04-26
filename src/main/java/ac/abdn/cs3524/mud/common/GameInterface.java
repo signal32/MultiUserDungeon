@@ -10,4 +10,5 @@ public interface GameInterface extends Remote {
     PlayerInterface joinGame(String playerName) throws RemoteException;
     int playerCount() throws RemoteException;
     PlayerManager getPlayerManager() throws RemoteException;
+    boolean removePlayer(PlayerInterface player)throws RemoteException;
 }
