@@ -72,11 +72,25 @@ public class MudClient {
             menuInputOne = in1.next();
 
             if (menuInputOne.equalsIgnoreCase("1")) {
-                System.out.println("Creating New Game");
-                game = server.newGame("myMud");
-                player = server.joinGame(game.getID(), playerName);
-                return;
-
+                while (true) {
+                    System.out.println("Select Game Map by inputting its name or press ENTER to go back:");
+                    for (int i = 0; i < server.listMaps().size(); i++) {
+                        System.out.println((i + 1) + ". " + server.listMaps().get(i));
+                    }
+                    Scanner in0 = new Scanner(System.in);
+                    String menuInputZero;
+                    menuInputZero = in0.nextLine();
+                    if (menuInputZero.isEmpty()) {
+                        break;
+                    } else if (server.listMaps().contains(menuInputZero)){
+                        System.out.println("Creating New Game, playing on: " + menuInputZero);
+                        game = server.newGame(menuInputZero);
+                        player = server.joinGame(game.getID(), playerName);
+                        return;
+                    } else {
+                        System.out.println("Invalid input, please try again");
+                    }
+                }
             } else if (menuInputOne.equalsIgnoreCase("2")) {
                 while (true) {
                     System.out.println("Input game's ID you want to join or press ENTER to go back");
