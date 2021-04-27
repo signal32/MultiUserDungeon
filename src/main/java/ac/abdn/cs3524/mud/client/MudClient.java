@@ -162,9 +162,6 @@ public class MudClient {
 
             System.out.println(player.getLocationInfo());
         }
-
-        // Remove player from the game
-        exit();
     }
 
     private void exit() throws RemoteException {
