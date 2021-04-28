@@ -1,5 +1,6 @@
 package ac.abdn.cs3524.mud.server;
 
+import ac.abdn.cs3524.mud.client.ClientInterface;
 import ac.abdn.cs3524.mud.common.GameInterface;
 import ac.abdn.cs3524.mud.common.PlayerInterface;
 
@@ -53,4 +54,8 @@ public interface MudServerInterface extends Remote {
     abstract List<String> listMaps() throws RemoteException;
 
     abstract String ping() throws RemoteException;
+
+    abstract void registerClient(ClientInterface client) throws RemoteException;
+
+    abstract void deregisterClient(String clientID) throws RemoteException;
 }

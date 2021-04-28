@@ -1,16 +1,16 @@
 package ac.abdn.cs3524.mud.server;
 
+import ac.abdn.cs3524.mud.client.ClientInterface;
 import ac.abdn.cs3524.mud.common.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.io.FileFilter;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
-public class MudServer implements MudServerInterface {
+public class MudServer extends Thread implements MudServerInterface {
 
     private static final Config CONFIG = Config.getConfig();
     private static final Logger LOGGER = LoggerFactory.getLogger(MudServer.class);
@@ -18,10 +18,12 @@ public class MudServer implements MudServerInterface {
     //private List<GameInterface> games;   // Active games
     private final Map<UUID,GameInterface> games;
     private final List<PlayerInterface> players; // Active players
+    private final Map<String, ClientInterface> clients;
 
     public MudServer() {
         this.games = new HashMap<>();
         this.players = new ArrayList<>();
+        this.clients = new HashMap<>();
     }
 
     @Override
@@ -96,5 +98,54 @@ public class MudServer implements MudServerInterface {
     @Override
     public String ping() throws RemoteException {
         return "pong";
+    }
+
+    @Override
+    public void registerClient(ClientInterface client) throws RemoteException {
+        clients.put(client.id(), client);
+        LOGGER.info("Client <{}> registered", client.id());
+    }
+
+    @Override
+    public void deregisterClient(String clientID) {
+        clients.remove(clientID);
+        LOGGER.info("Client <{}> unregistered", clientID);
+    }
+
+    private boolean validateClient(ClientInterface client){
+        try{
+            return client.ping();
+        }
+        catch (RemoteException e){
+            return false;
+        }
+    }
+
+    @Override
+    public void run(){
+        Map<String, ClientInterface> clientsBuf;
+        List<String> toRemove;
+        boolean exec = true;
+        while (exec){
+            clientsBuf = new HashMap<>(clients);    // Use buffer to avoid illegal modification from other threads
+            toRemove = new ArrayList<>();           // Create a list of invalid clients
+
+            // Check for invalid clients
+            for (Map.Entry<String, ClientInterface> client : clientsBuf.entrySet()) {
+                if (!validateClient(client.getValue())) {
+                    LOGGER.warn("Lost connection to client {}", client.getKey());
+                    toRemove.add(client.getKey());
+                }
+            }
+
+            // Remove invalid clients
+            for (String id : toRemove){
+                deregisterClient(id);
+            }
+
+            // This doesn't need to loop frequently
+            try { Thread.sleep(5000); }
+            catch (InterruptedException e) { exec = false; }
+        }
     }
 }

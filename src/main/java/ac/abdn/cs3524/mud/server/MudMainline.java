@@ -29,7 +29,7 @@ public class MudMainline {
             System.setSecurityManager( new SecurityManager() ) ;
 
             // Setup Mud Server and create stub
-            MudServerInterface server = new MudServer();
+            MudServer server = new MudServer();
             MudServerInterface serverStub = (MudServerInterface) UnicastRemoteObject.exportObject(server, serverPort);
             LOGGER.info("Server initialised on {}:{}", hostname,serverPort);
 
@@ -39,6 +39,8 @@ public class MudMainline {
             LOGGER.info("Remote registry initialised on {}:{}", hostname,registryPort);
 
             LOGGER.info("Startup complete!");
+
+            server.start();
 
         }
         catch (Exception e){

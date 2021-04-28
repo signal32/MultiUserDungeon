@@ -10,10 +10,11 @@ import org.slf4j.LoggerFactory;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class MudClient {
+public class MudClient implements ClientInterface{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MudClient.class);
 
@@ -21,6 +22,7 @@ public class MudClient {
     private GameInterface game;
     private MudServerInterface server;
     private boolean run = true;
+    private final UUID id = UUID.randomUUID();
 
     public static void main(String[] args) {
         try {
@@ -35,12 +37,21 @@ public class MudClient {
             Registry registry = LocateRegistry.getRegistry(serverHostName, serverPort);
             app.server = (MudServerInterface) registry.lookup("MudServerInterface");
 
+            //--------
+            System.setProperty( "java.security.policy", "content/rmi.policy" ) ;
+            System.setSecurityManager(new SecurityManager());
+            ClientInterface clientInterface = (ClientInterface) UnicastRemoteObject.exportObject(app,8082);
+            app.server.registerClient(clientInterface);
+
+
             // Run the game
             while (app.run) {
                 app.menu();
+                if (!app.run) break;
                 app.game();
             }
 
+            app.server.deregisterClient(clientInterface.id());
             // Close down game
             app.exit();
 
@@ -203,5 +214,15 @@ public class MudClient {
         } catch (Exception e) {
             return false;
         }
+    }
+
+    @Override
+    public boolean ping() throws RemoteException {
+        return true;
+    }
+
+    @Override
+    public String id() throws RemoteException {
+        return this.id.toString();
     }
 }
