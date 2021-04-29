@@ -37,7 +37,7 @@ public class MUDPlayerManager implements PlayerManager{
             return true;
         }
         catch (Exception e){
-            LOGGER.error("Could pickup thing: {}", e.getMessage());
+            LOGGER.error("Could not pickup thing: {}", e.getMessage());
             throw new IllegalArgumentException("Could not pickup thing");
         }
     }
@@ -49,7 +49,7 @@ public class MUDPlayerManager implements PlayerManager{
             return true;
         }
         catch (Exception e){
-            LOGGER.error("Could drop thing: {}", e.getMessage());
+            LOGGER.error("Could not drop thing: {}", e.getMessage());
             throw new IllegalArgumentException("Could not drop thing");
         }
     }

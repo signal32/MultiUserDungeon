@@ -154,7 +154,7 @@ public class MudClient implements ClientInterface{
             // Get input and update
             player.getLocationInfo();
             System.out.println("Type command:");
-            String input =scanner.next();
+            String input = scanner.next();
             if (input.equals("north") || input.equals("n")) {
                 player.move("north");
             }
