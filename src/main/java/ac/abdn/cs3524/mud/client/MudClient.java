@@ -69,8 +69,6 @@ public class MudClient implements ClientInterface{
             }
 
             app.server.deregisterClient(clientInterface.id());
-            // Close down game
-            app.exit();
 
         } catch(Exception e){
                 LOGGER.error("Fatal error: {}", e.getMessage());
@@ -208,7 +206,7 @@ public class MudClient implements ClientInterface{
                     System.out.println("You are the only player in this game.");
                 }
                 else {
-                    System.out.println("There are " + (players.size() + 1) + " players in the game.");
+                    System.out.println("There are " + (players.size()) + " players in the game.");
                 }
                 for (int i = 0; i < players.size(); i++) {
                     if(i == 0 && players.size() == 1)
