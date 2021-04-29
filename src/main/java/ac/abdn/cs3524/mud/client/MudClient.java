@@ -11,6 +11,7 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
@@ -40,9 +41,25 @@ public class MudClient implements ClientInterface{
             //--------
             System.setProperty( "java.security.policy", "content/rmi.policy" ) ;
             System.setSecurityManager(new SecurityManager());
-            ClientInterface clientInterface = (ClientInterface) UnicastRemoteObject.exportObject(app,8082);
+
+            int clientPort = Integer.parseInt(clientConfig.getProperty("client.port").orElse("8082"));
+            boolean isClientInit = false;
+            ClientInterface clientInterface = null;
+            do
+            {
+                try {
+                    clientInterface =  (ClientInterface) UnicastRemoteObject.exportObject(app,clientPort);
+                    isClientInit = true;
+                }
+                catch (Exception e) {
+                    System.out.println("Cannot init client at port " + clientPort);
+                    clientPort++;
+                }
+            }
+            while(!isClientInit);
             app.server.registerClient(clientInterface);
 
+            System.out.println("Client initiated at port " + clientPort + " instead");
 
             // Run the game
             while (app.run) {
@@ -97,6 +114,7 @@ public class MudClient implements ClientInterface{
                         System.out.println("Creating New Game, playing on: " + menuInputZero);
                         game = server.newGame(menuInputZero);
                         player = server.joinGame(game.getID(), playerName);
+                        System.out.println("Your GameID is: " + game.getID());
                         return;
                     } else {
                         System.out.println("Invalid input, please try again");
@@ -184,6 +202,31 @@ public class MudClient implements ClientInterface{
             else if (input.equals("inventory") || input.equals("i")){
                 System.out.println(player.getInventory().toString());
             }
+            else if (input.equals("list") || input.equals("l")){
+                List<PlayerInterface> players = game.getList();
+                if (players.size() == 1) {
+                    System.out.println("You are the only player in this game.");
+                }
+                else {
+                    System.out.println("There are " + (players.size() + 1) + " players in the game.");
+                }
+                for (int i = 0; i < players.size(); i++) {
+                    if(i == 0 && players.size() == 1)
+                    {
+                        System.out.print("[ " + players.get(i).getName() + " ]");
+                    }
+                    else if (i == 0){
+                        System.out.print("[ " + players.get(i).getName());
+                    }
+                    else if (i == (players.size() - 1)){
+                        System.out.println(", " + players.get(i).getName() + " ]");
+                    }
+                    else {
+                        System.out.print(", " + players.get(i).getName());
+                    }
+                }
+                System.out.println();
+            }
 
             System.out.println(player.getLocationInfo());
         }
@@ -203,6 +246,7 @@ public class MudClient implements ClientInterface{
         System.out.println("inventory - see the items you are carrying");
         System.out.println("location - show your current surroundings");
         System.out.println("help - display the available commands");
+        System.out.println("list - display a list of all online players");
         System.out.println("menu - display all options regarding MUDS");
         System.out.println("exit - exit the game");
     }

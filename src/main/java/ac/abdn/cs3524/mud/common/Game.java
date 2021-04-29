@@ -78,4 +78,9 @@ public class Game implements GameInterface {
         world.delThing(player.getLocation(),player.getName());
         return true;
     }
+
+    @Override
+    public List<PlayerInterface> getList() throws RemoteException {
+        return this.players;
+    }
 }

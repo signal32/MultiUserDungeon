@@ -2,6 +2,7 @@ package ac.abdn.cs3524.mud.common;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.List;
 import java.util.UUID;
 
 public interface GameInterface extends Remote {
@@ -11,4 +12,5 @@ public interface GameInterface extends Remote {
     int playerCount() throws RemoteException;
     PlayerManager getPlayerManager() throws RemoteException;
     boolean removePlayer(PlayerInterface player)throws RemoteException;
+    List<PlayerInterface> getList() throws RemoteException;
 }
