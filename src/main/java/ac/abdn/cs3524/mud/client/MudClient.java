@@ -68,6 +68,7 @@ public class MudClient implements ClientInterface{
             }
 
             app.server.deregisterClient(clientInterface.id());
+            System.exit(0);
 
         } catch(Exception e){
                 LOGGER.error("Fatal error: {}", e.getMessage());
