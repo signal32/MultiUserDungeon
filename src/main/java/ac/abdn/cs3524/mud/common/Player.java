@@ -18,6 +18,7 @@ public class Player implements PlayerInterface {
         this.location = startLocation;
         this.manager = playerManager;
         this.inventory = new ArrayList<>();
+        manager.drop(this,this.name);
     }
 
     @Override
