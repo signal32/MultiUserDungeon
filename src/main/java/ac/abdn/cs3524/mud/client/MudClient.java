@@ -64,8 +64,7 @@ public class MudClient implements ClientInterface{
             // Run the game
             while (app.run) {
                 app.menu();
-                if (!app.run) break;
-                app.game();
+                if (app.run) {app.game();}
             }
 
             app.server.deregisterClient(clientInterface.id());
@@ -86,8 +85,7 @@ public class MudClient implements ClientInterface{
         else
             playerName = player.getName();
 
-        boolean menu = true;
-        while (menu) {
+        while (true) {
             System.out.println("Choose one of the options (by inputting its number then pressing ENTER):");
             System.out.println("1. Create a new game");
             System.out.println("2. Join existing game");
@@ -164,8 +162,7 @@ public class MudClient implements ClientInterface{
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Hello " + player.getName() +", You have entered the game at: " + player.getLocation() + player.getLocationInfo());
-        boolean play = true;
-        while (play && run) {
+        while (run) {
 
             // Get input and update
             player.getLocationInfo();
