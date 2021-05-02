@@ -195,9 +195,16 @@ public class MudClient implements ClientInterface{
                 this.run = false;
             }
             else if (input.contains("pick") || input.equals("p")) {
-                player.pickUp(scanner.next());
-                System.out.println("Inventory: " + player.getInventory().toString());
-                System.out.println(player.getLocationInfo());
+                String item = scanner.next();
+                if(player.pickUp(item) == true)
+                {
+                    System.out.println("Inventory: " + player.getInventory().toString());
+                    System.out.println(player.getLocationInfo());
+                }
+                else {
+                    System.out.println("Cannot pick " + item);
+                }
+
             }
             else if (input.contains("drop") || input.equals("d")) {
                 player.drop(scanner.next());

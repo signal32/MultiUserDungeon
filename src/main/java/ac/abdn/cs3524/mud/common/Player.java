@@ -66,6 +66,10 @@ public class Player implements PlayerInterface {
 
     @Override
     public boolean pickUp(String item) throws RemoteException {
+        if (game.doesPlayerExist(item) == true) {
+            return false;
+        }
+
         if (manager.pickup(this,item)) {
             inventory.add(item);
             return true;

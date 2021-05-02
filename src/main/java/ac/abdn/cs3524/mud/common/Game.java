@@ -113,7 +113,15 @@ public class Game implements GameInterface {
                 return false;
             }
         }
+    }
 
+    public boolean doesPlayerExist(String name) throws RemoteException {
+        for (int i = 0; i < players.size(); i++){
+            if(players.get(i).getName().equals(name)){
+                return true;
+            }
+        }
 
+        return false;
     }
 }
