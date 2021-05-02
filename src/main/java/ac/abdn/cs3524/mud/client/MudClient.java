@@ -169,7 +169,8 @@ public class MudClient implements ClientInterface{
         Scanner scanner = new Scanner(System.in);
 
         System.out.println("Hello " + player.getName() +", You have entered the game at: " + player.getLocation() + player.getLocationInfo());
-        while (run) {
+        boolean play = true;
+        while (run && play) {
 
             // Get input and update
             player.getLocationInfo();
@@ -192,7 +193,7 @@ public class MudClient implements ClientInterface{
                 System.out.println(player.getLocationInfo());
             }
             else if (input.equals("exit")) {
-                this.run = false;
+                play = false;
             }
             else if (input.contains("pick") || input.equals("p")) {
                 String item = scanner.next();
@@ -271,14 +272,11 @@ public class MudClient implements ClientInterface{
                     {
                         System.out.println("Sending message FAILED: Receiver not found");
                     }
-
-
                 }
             }
-            else if (input.equals("menu")){
-                System.out.println("TODO: Menu");
-            }
         }
+
+        exit();
     }
 
     private void exit() throws RemoteException {
@@ -307,7 +305,6 @@ public class MudClient implements ClientInterface{
         System.out.println("m <receiver's name> <message content> - (shorthand) send a message to a player in the current game");
         System.out.println("message all <message content> - send a message to all players in the current game");
         System.out.println("m all <message content> - (shorthand) send a message to all players in the current game");
-        System.out.println("menu - display all options regarding MUDS");
         System.out.println("exit - exit the game");
     }
 
