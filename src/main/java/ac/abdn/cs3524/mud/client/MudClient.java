@@ -267,4 +267,9 @@ public class MudClient implements ClientInterface{
     public String id() throws RemoteException {
         return this.id.toString();
     }
+
+    @Override
+    public void refresh() throws RemoteException {
+        System.out.println(this.player.getLocationInfo());
+    }
 }
