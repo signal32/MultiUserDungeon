@@ -1,5 +1,7 @@
 package ac.abdn.cs3524.mud.common;
 
+import ac.abdn.cs3524.mud.client.ClientInterface;
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.List;
@@ -11,14 +13,18 @@ public class Player implements PlayerInterface {
     private String location;
     private final PlayerManager manager;
     private final List<String> inventory;
+    private final GameInterface game;
+    private final ClientInterface client;
 
-    public Player(String name, String startLocation, PlayerManager playerManager){
+    public Player(String name, ClientInterface client, String startLocation, PlayerManager playerManager, GameInterface game){
         this.id = UUID.randomUUID();
         this.name = name;
         this.location = startLocation;
         this.manager = playerManager;
         this.inventory = new ArrayList<>();
         manager.drop(this,this.name);
+        this.game = game;
+        this.client = client;
     }
 
     @Override
@@ -48,7 +54,14 @@ public class Player implements PlayerInterface {
 
     @Override
     public boolean move(String direction) throws RemoteException {
-        return manager.move(this,direction);
+        if (manager.move(this,direction)){
+            for (var player : game.getList()){
+                if (!player.getName().equals(this.name))
+                    player.getClient().refresh();
+            }
+            return true;
+        }
+        return false;
     }
 
     @Override
@@ -69,5 +82,10 @@ public class Player implements PlayerInterface {
     @Override
     public List<String> getInventory() throws RemoteException {
         return inventory;
+    }
+
+    @Override
+    public ClientInterface getClient() throws RemoteException {
+        return this.client;
     }
 }

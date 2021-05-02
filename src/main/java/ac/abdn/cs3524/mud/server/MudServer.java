@@ -27,10 +27,10 @@ public class MudServer extends Thread implements MudServerInterface {
     }
 
     @Override
-    public PlayerInterface joinGame(UUID gameID, String playerName) throws RemoteException{
+    public PlayerInterface joinGame(UUID gameID, String playerName, String clientID) throws RemoteException{
         try{
             GameInterface game = games.get(gameID);
-            PlayerInterface player = game.joinGame(playerName);
+            PlayerInterface player = game.joinGame(clients.get(clientID),playerName);
             players.add(player);
             LOGGER.info("Player '{}' joined game '{}'", player.getName(), gameID);
             return (PlayerInterface) UnicastRemoteObject.exportObject(player, Integer.parseInt(CONFIG.getProperty("server.port").orElseThrow()));

@@ -1,5 +1,6 @@
 package ac.abdn.cs3524.mud.common;
 
+import ac.abdn.cs3524.mud.client.ClientInterface;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -47,12 +48,12 @@ public class Game implements GameInterface {
     }
 
     @Override
-    public PlayerInterface joinGame(String playerName) throws RemoteException {
+    public PlayerInterface joinGame(ClientInterface client, String playerName) throws RemoteException {
         try {
             if (players.size() >= playerLimit) throw new RemoteException("Can't join game: full");
 
             // Create a new player for this game and add it to the world
-            PlayerInterface player = new Player(playerName, world.startLocation(), playerManager);
+            PlayerInterface player = new Player(playerName, client,world.startLocation(), playerManager, this);
             players.add(player);
 
             return player;

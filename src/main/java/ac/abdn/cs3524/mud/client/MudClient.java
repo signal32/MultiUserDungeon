@@ -109,7 +109,7 @@ public class MudClient implements ClientInterface{
                     } else if (server.listMaps().contains(menuInputZero)){
                         System.out.println("Creating New Game, playing on: " + menuInputZero);
                         game = server.newGame(menuInputZero);
-                        player = server.joinGame(game.getID(), playerName);
+                        player = server.joinGame(game.getID(), playerName, this.id.toString());
                         System.out.println("Your GameID is: " + game.getID());
                         return;
                     } else {
@@ -129,7 +129,7 @@ public class MudClient implements ClientInterface{
                             if (server.listGames().contains(UUID.fromString(menuInputTwo))) {
                                 System.out.println("Joining: " + menuInputTwo);
                                 game = server.getGame(UUID.fromString(menuInputTwo));
-                                player = server.joinGame(UUID.fromString(menuInputTwo), playerName);
+                                player = server.joinGame(UUID.fromString(menuInputTwo), playerName, this.id.toString());
                                 return;
                             }
                         } else {
@@ -181,7 +181,7 @@ public class MudClient implements ClientInterface{
                 player.move("west");
             }
             else if (input.equals("exit")) {
-                play = false;
+                this.run = false;
             }
             else if (input.contains("pick")) {
                 player.pickUp(scanner.next());

@@ -13,7 +13,7 @@ import java.util.UUID;
 public interface MudServerInterface extends Remote {
 
 
-    abstract PlayerInterface joinGame(UUID gameID, String playerName) throws RemoteException;
+    abstract PlayerInterface joinGame(UUID gameID, String playerName, String clientID) throws RemoteException;
     abstract void leaveGame(GameInterface game, PlayerInterface player) throws RemoteException;
 
     /**
