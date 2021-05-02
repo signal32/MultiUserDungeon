@@ -84,4 +84,36 @@ public class Game implements GameInterface {
     public List<PlayerInterface> getList() throws RemoteException {
         return this.players;
     }
+
+    @Override
+    public boolean sendMessage(String senderName, String receiverName, String message) throws  RemoteException {
+        PlayerInterface receiver = null;
+
+        if (receiverName.equals("all")) {
+            for (int i = 0; i < players.size(); i++){
+                players.get(i).getClient().receiveMessage(senderName, message);
+            }
+
+            return true;
+        }
+        else {
+            for (int i = 0; i < players.size(); i++){
+                if(players.get(i).getName().equals(receiverName)){
+                    receiver = players.get(i);
+                }
+            }
+
+            if (receiver != null)
+            {
+                receiver.getClient().receiveMessage(senderName, message);
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+
+    }
 }

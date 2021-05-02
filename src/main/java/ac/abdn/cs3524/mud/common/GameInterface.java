@@ -15,4 +15,5 @@ public interface GameInterface extends Remote {
     PlayerManager getPlayerManager() throws RemoteException;
     boolean removePlayer(PlayerInterface player)throws RemoteException;
     List<PlayerInterface> getList() throws RemoteException;
+    boolean sendMessage(String senderName, String receiverName, String message) throws  RemoteException;
 }

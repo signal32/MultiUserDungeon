@@ -7,4 +7,5 @@ public interface ClientInterface extends Remote {
     abstract boolean ping() throws RemoteException;
     abstract String id() throws RemoteException;
     abstract void refresh() throws RemoteException;
+    abstract void receiveMessage(String senderName, String message) throws RemoteException;
 }

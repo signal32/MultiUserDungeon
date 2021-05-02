@@ -57,9 +57,15 @@ public class MudClient implements ClientInterface{
                 }
             }
             while(!isClientInit);
+
             app.server.registerClient(clientInterface);
 
-            System.out.println("Client initiated at port " + clientPort + " instead");
+            if (clientPort == Integer.parseInt(clientConfig.getProperty("client.port").orElse("8082"))) {
+                System.out.println("Client initiated at port " + clientPort);
+            }
+            else {
+                System.out.println("Client initiated at port " + clientPort + " instead");
+            }
 
             // Run the game
             while (app.run) {
@@ -171,32 +177,41 @@ public class MudClient implements ClientInterface{
             String input = scanner.next();
             if (input.equals("north") || input.equals("n")) {
                 player.move("north");
+                System.out.println(player.getLocationInfo());
             }
             else if (input.equals("south") || input.equals("s")) {
                 player.move("south");
+                System.out.println(player.getLocationInfo());
             }
             else if (input.equals("east") || input.equals("e")) {
                 player.move("east");
+                System.out.println(player.getLocationInfo());
             }
             else if (input.equals("west") || input.equals("w")) {
                 player.move("west");
+                System.out.println(player.getLocationInfo());
             }
             else if (input.equals("exit")) {
                 this.run = false;
             }
-            else if (input.contains("pick")) {
+            else if (input.contains("pick") || input.equals("p")) {
                 player.pickUp(scanner.next());
                 System.out.println("Inventory: " + player.getInventory().toString());
+                System.out.println(player.getLocationInfo());
             }
-            else if (input.contains("drop")) {
+            else if (input.contains("drop") || input.equals("d")) {
                 player.drop(scanner.next());
                 System.out.println("Inventory: " + player.getInventory().toString());
+                System.out.println(player.getLocationInfo());
             }
-            else if (input.equals("help")) {
+            else if (input.contains("location") || input.equals("loc")) {
+                System.out.println(player.getLocationInfo());
+            }
+            else if (input.equals("help") || input.equals("h")) {
                 displayHelp();
             }
             else if (input.equals("inventory") || input.equals("i")){
-                System.out.println(player.getInventory().toString());
+                System.out.println("Inventory: " + player.getInventory().toString());
             }
             else if (input.equals("list") || input.equals("l")){
                 List<PlayerInterface> players = game.getList();
@@ -223,8 +238,39 @@ public class MudClient implements ClientInterface{
                 }
                 System.out.println();
             }
+            else if (input.equals("message") || input.equals("m")){
+                String receiver = scanner.next();
+                String message = null;
+                if (receiver.equals("all")) {
+                    message = scanner.nextLine();
+                    System.out.println("Message to All:" + message);
 
-            System.out.println(player.getLocationInfo());
+                    if(game.sendMessage(player.getName(), receiver, message) == true) {
+                        System.out.println("Message sent successfully");
+                    }
+                    else
+                    {
+                        System.out.println("Sending message FAILED: Receiver not found");
+                    }
+                }
+                else {
+                    message = scanner.nextLine();
+                    System.out.printf("Message to %s: %s\n", receiver, message);
+
+                    if(game.sendMessage(player.getName(), receiver, message) == true) {
+                        System.out.println("Message sent successfully");
+                    }
+                    else
+                    {
+                        System.out.println("Sending message FAILED: Receiver not found");
+                    }
+
+
+                }
+            }
+            else if (input.equals("menu")){
+                System.out.println("TODO: Menu");
+            }
         }
     }
 
@@ -236,13 +282,24 @@ public class MudClient implements ClientInterface{
         System.out.println();
         System.out.println("You can choose from one of these commands:");
         System.out.println();
-        System.out.println("(move) <direction> - move in the selected direction (north, east, south, west)");
+        System.out.println("<direction> - move in the selected direction (north, east, south, west)");
+        System.out.println("n/e/s/w - (shorthand) move in the selected direction (north, east, south, west)");
         System.out.println("pick <item> - pick up the item to your inventory");
+        System.out.println("p <item> - (shorthand) pick up the item to your inventory");
         System.out.println("drop <item> - drop an item from your inventory");
+        System.out.println("d <item> - (shorthand) drop an item from your inventory");
         System.out.println("inventory - see the items you are carrying");
+        System.out.println("i - (shorthand) see the items you are carrying");
         System.out.println("location - show your current surroundings");
+        System.out.println("loc - (shorthand) show your current surroundings");
         System.out.println("help - display the available commands");
+        System.out.println("h - (shorthand) display the available commands");
         System.out.println("list - display a list of all online players");
+        System.out.println("l - (shorthand) display a list of all online players");
+        System.out.println("message <receiver's name> <message content> - send a message to a player in the current game");
+        System.out.println("m <receiver's name> <message content> - (shorthand) send a message to a player in the current game");
+        System.out.println("message all <message content> - send a message to all players in the current game");
+        System.out.println("m all <message content> - (shorthand) send a message to all players in the current game");
         System.out.println("menu - display all options regarding MUDS");
         System.out.println("exit - exit the game");
     }
@@ -269,5 +326,10 @@ public class MudClient implements ClientInterface{
     @Override
     public void refresh() throws RemoteException {
         System.out.println(this.player.getLocationInfo());
+    }
+
+    @Override
+    public void receiveMessage(String senderName, String message) throws RemoteException {
+        System.out.printf("Message received from %s: %s\n", senderName, message);
     }
 }
