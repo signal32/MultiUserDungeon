@@ -4,6 +4,9 @@ import ac.abdn.cs3524.mud.server.MudServer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+/**
+ * Manager which performs bridge between players of MUD games and the implementation of the MUD world.
+ */
 public class MUDPlayerManager implements PlayerManager{
 
     private static final Logger LOGGER = LoggerFactory.getLogger(MudServer.class);

@@ -10,6 +10,10 @@ import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.*;
 
+/**
+ * Main implementation of a server for handling MUD games.
+ * Calling run() on this class will start the connection validation worker thread.
+ */
 public class MudServer extends Thread implements MudServerInterface {
 
     private static final Config CONFIG = Config.getConfig();
@@ -121,6 +125,9 @@ public class MudServer extends Thread implements MudServerInterface {
         }
     }
 
+    /**
+     * Service to validate connected clients and to handle situations where clients become disconnected.
+     */
     @Override
     public void run(){
         Map<String, ClientInterface> clientsBuf;

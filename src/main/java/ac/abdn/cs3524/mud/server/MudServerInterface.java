@@ -12,15 +12,26 @@ import java.util.UUID;
 
 public interface MudServerInterface extends Remote {
 
-
+    /**
+     * Allow a registered client to join a game
+     * @param gameID game identifier (must be active)
+     * @param playerName name to join game as
+     * @param clientID id of the client (must be registered with client)
+     * @return A new player for the given client for the game and with the name specified
+     */
     abstract PlayerInterface joinGame(UUID gameID, String playerName, String clientID) throws RemoteException;
+
+    /**
+     * Removes a player safely from a game
+     * @param game the game
+     * @param player the player
+     */
     abstract void leaveGame(GameInterface game, PlayerInterface player) throws RemoteException;
 
     /**
      * Create a new game using MUD loaded from file system
      * @param mapID the folder in which map files exist - contains map.edg, map.msg, map.thg
      * @return Interface for generated game
-     * @throws RemoteException
      */
     abstract GameInterface newGame(String mapID) throws RemoteException;
 
@@ -32,7 +43,6 @@ public interface MudServerInterface extends Remote {
      * @param messages
      * @param things
      * @return
-     * @throws RemoteException
      */
     abstract GameInterface newGame(String name, String edges, String messages, String things) throws RemoteException;
 
@@ -51,11 +61,23 @@ public interface MudServerInterface extends Remote {
      */
     abstract List<UUID> listGames() throws RemoteException;
 
+    /**
+     * Get a list of all maps/game worlds which the server can load
+     * @return list of map names
+     */
     abstract List<String> listMaps() throws RemoteException;
 
-    abstract String ping() throws RemoteException;
-
+    /**
+     * Make the server aware of a client. Allows server to make callbacks and handle further authentication
+     * @param client client to register, must have ID
+     */
     abstract void registerClient(ClientInterface client) throws RemoteException;
 
+    /**
+     * Remove a client from the servers registration list
+     * @param clientID client, must be registered
+     */
     abstract void deregisterClient(String clientID) throws RemoteException;
+
+    abstract String ping() throws RemoteException;
 }
